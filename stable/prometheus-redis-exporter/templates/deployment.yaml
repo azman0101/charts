@@ -36,6 +36,13 @@ spec:
           env:
             - name: REDIS_ADDR
               value: {{ .Values.redisAddress }}
+{{- if .Values.password }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "prometheus-redis-exporter.fullname" . }}
+                  key: password
+{{- end }}
           livenessProbe:
             httpGet:
               path: /

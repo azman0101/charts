@@ -13,3 +13,7 @@
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl port-forward $POD_NAME 8080:{{ .Values.service.internalPort }}
 {{- end }}
+{{- if .Values.password }}
+ How to check the secret ?
+  kubectl get secret -n {{ .Release.Namespace }} {{ template "prometheus-redis-exporter.fullname" . }} -o "jsonpath={.data.password}" | openssl enc -d -base64 -A
+{{- end }}
