@@ -4,8 +4,10 @@ kind: CustomResourceDefinition
 metadata:
   name: clusterissuers.certmanager.k8s.io
 {{- if semverCompare ">=2.10-0" .Capabilities.TillerVersion.SemVer }}
+{{- if .Release.IsInstall }}
   annotations:
     "helm.sh/hook": crd-install
+{{- end }}
 {{- end }}
   labels:
     app: {{ template "cert-manager.name" . }}
