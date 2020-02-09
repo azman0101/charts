@@ -1,0 +1,16 @@
+{{- if .Values.settings.custom_plugin_monitors -}}
+apiVersion: v1
+data:
+{{- range $key, $value := .Values.settings.custom_plugin_monitors }}
+  {{ $key }}:
+{{ toYaml $value | indent 4 }}
+{{- end }}
+kind: ConfigMap
+metadata:
+  name: {{ include "node-problem-detector.fullname" . }}-custom
+  labels:
+    app.kubernetes.io/name: {{ include "node-problem-detector.name" . }}
+    helm.sh/chart: {{ include "node-problem-detector.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}

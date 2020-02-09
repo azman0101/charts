@@ -100,3 +100,21 @@ env:
 extraVolumes: []
 
 extraVolumeMounts: []
+
+## Additional hostPath mounts
+##
+extraHostPathMounts: []
+  # - name: certs-dir
+  #   mountPath: /etc/kubernetes/certs
+  #   hostPath: /etc/ku bernetes/certs
+  #   readOnly: true
+
+# extraVolumes:
+#   - name: es-certs
+#     secret:
+#       defaultMode: 420
+#       secretName: es-certs
+# extraVolumeMounts:
+#   - name: es-certs
+#     mountPath: /certs
+#     readOnly: true

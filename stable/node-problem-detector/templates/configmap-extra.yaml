@@ -1,0 +1,16 @@
+{{- if .Values.extraConfigMaps -}}
+apiVersion: v1
+data:
+{{- range $key, $value := .Values.extraConfigMaps }}
+  {{ $key }}:
+{{ toYaml $value | indent 4 }}
+{{- end }}
+kind: ConfigMap
+metadata:
+  name: {{ include "node-problem-detector.fullname" . }}-extra
+  labels:
+    app.kubernetes.io/name: {{ include "node-problem-detector.name" . }}
+    helm.sh/chart: {{ include "node-problem-detector.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}

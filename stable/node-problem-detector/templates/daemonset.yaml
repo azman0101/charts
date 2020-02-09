@@ -42,7 +42,7 @@ spec:
           command:
             - "/bin/sh"
             - "-c"
-            - "exec /node-problem-detector --logtostderr --system-log-monitors={{- range $index, $monitor := .Values.settings.log_monitors }}{{if ne $index 0}},{{end}}{{ $monitor }}{{- end }} {{- if .Values.settings.custom_plugin_monitors }} --custom-plugin-monitors={{- range $index, $monitor := .Values.settings.custom_plugin_monitors }}{{if ne $index 0}},{{end}}{{ $monitor }}{{- end }} {{- end }} --prometheus-address={{ .Values.settings.prometheus_address }} --prometheus-port={{ .Values.settings.prometheus_port }} --k8s-exporter-heartbeat-period={{ .Values.settings.heartBeatPeriod }}"
+            - "exec /node-problem-detector --logtostderr --config.system-log-monitor={{- range $index, $monitor := .Values.settings.log_monitors }}{{if ne $index 0}},{{end}}{{ $monitor }}{{- end }} {{- if .Values.settings.custom_plugin_monitors }} --config.custom-plugin-monitor={{- range $index, $monitor := .Values.settings.custom_plugin_monitors }}{{if ne $index 0}},{{end}}{{ $monitor }}{{- end }} {{- end }} --prometheus-address={{ .Values.settings.prometheus_address }} --prometheus-port={{ .Values.settings.prometheus_port }} --k8s-exporter-heartbeat-period={{ .Values.settings.heartBeatPeriod }}"
 {{- if .Values.securityContext }}
           securityContext:
 {{ toYaml .Values.securityContext | indent 12 }}
@@ -67,6 +67,11 @@ spec:
 {{- if .Values.extraVolumeMounts }}
 {{ toYaml .Values.extraVolumeMounts | indent 12 }}
 {{- end }}
+          {{- range .Values.extraHostPathMounts }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+              readOnly: {{ .readOnly }}
+          {{- end }}
           ports:
             - containerPort: {{ .Values.settings.prometheus_port }}
               name: exporter
@@ -98,3 +103,8 @@ spec:
 {{- if .Values.extraVolumes }}
 {{ toYaml .Values.extraVolumes | indent 8 }}
 {{- end }}
+      {{- range .Values.extraHostPathMounts }}
+        - name: {{ .name }}
+          hostPath:
+            path: {{ .hostPath }}
+      {{- end }}
